@@ -13,7 +13,5 @@ class DevelopmentConfig(Config):
 
 
 class TestingConfig(Config):
-    # create database in Postgres and
-    # insert your database URI for testing config
     SQLALCHEMY_DATABASE_URI = os.environ["TESTING_DATABASE_URL"]
     TESTING = True

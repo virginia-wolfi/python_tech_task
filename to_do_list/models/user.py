@@ -11,6 +11,7 @@ class UserModel(db.Model):
     password = db.Column(
         db.String, db.CheckConstraint("char_length(password) > 5"), nullable=False
     )
+    tasks = db.relationship('TaskModel', backref='user')
 
     def save_to_db(self) -> None:
         db.session.add(self)
