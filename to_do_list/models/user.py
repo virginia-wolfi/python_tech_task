@@ -13,4 +13,10 @@ class UserModel(db.Model):
     )
     tasks = db.relationship("TaskModel", backref="user")
 
+    @classmethod
+    def find_by_username(cls, username: str) -> "UserModel":
+        return db.session.scalars(db.select(cls).filter_by(username=username)).first()
 
+    @classmethod
+    def find_by_id(cls, _id: int) -> "UserModel":
+        return db.session.scalars(db.select(cls).filter_by(id=_id)).first()

@@ -1,20 +1,6 @@
-from .models.task import TaskModel
-from .db import db
+from ..models.task import TaskModel
+from ..db import db
 from sqlalchemy import and_
-
-
-def find_all(model: db.Model) -> list[db.Model]:
-    return db.session.scalars(db.select(model)).all()
-
-
-def save_to_db(model: db.Model) -> None:
-    db.session.add(model)
-    db.session.commit()
-
-
-def delete_from_db(model: db.Model) -> None:
-    db.session.delete(model)
-    db.session.commit()
 
 
 def find_tasks(**kwargs) -> list[TaskModel]:
@@ -36,6 +22,6 @@ def find_tasks(**kwargs) -> list[TaskModel]:
     return db.session.scalars(db.select(TaskModel).where(and_(*filters))).all()
 
 
-def update_task(id, **kwargs) -> None:
+def update_task(id: int, **kwargs) -> None:
     db.session.query(TaskModel).filter_by(id=id).update(kwargs)
     db.session.commit()

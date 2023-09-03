@@ -13,3 +13,11 @@ class TaskModel(db.Model):
     user_id = db.Column(
         db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), nullable=False
     )
+
+    @classmethod
+    def find_by_id(cls, _id: int) -> "TaskModel":
+        return db.session.scalars(db.select(cls).filter_by(id=_id)).first()
+
+    @classmethod
+    def find_all(cls) -> list["TaskModel"]:
+        return db.session.scalars(db.select(cls)).all()
