@@ -1,4 +1,5 @@
 from ..db import db
+from hmac import compare_digest
 
 
 class UserModel(db.Model):
@@ -20,3 +21,6 @@ class UserModel(db.Model):
     @classmethod
     def find_by_id(cls, _id: int) -> "UserModel":
         return db.session.scalars(db.select(cls).filter_by(id=_id)).first()
+
+    def check_password(self, _password):
+        return compare_digest(_password, self.password)
