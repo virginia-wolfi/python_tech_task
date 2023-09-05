@@ -17,11 +17,11 @@ creation_task_fields = Model(
     "Creation task model",
     {
         "title": fields.String(
-            required=True, description="Task title", example="Finish a novel"
+            required=True, description="Task title", example="Finish a novel", min_length=4
         ),
         "description": fields.String(
             description="Task description",
-            example="Writing last chapter in the 'Son' novel",
+            example="Writing last chapter in the 'Son' novel", min_length=4
         ),
         "status": fields.String(
             description="Task status",
