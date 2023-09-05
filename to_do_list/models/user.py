@@ -1,4 +1,5 @@
 from ..db import db
+from .task import TaskModel
 from hmac import compare_digest
 
 
@@ -12,7 +13,7 @@ class UserModel(db.Model):
     password = db.Column(
         db.String, db.CheckConstraint("char_length(password) > 5"), nullable=False
     )
-    tasks = db.relationship("TaskModel", backref="user")
+    tasks = db.relationship("TaskModel", backref="user", cascade="all, delete")
 
     @classmethod
     def find_by_username(cls, username: str) -> "UserModel":
@@ -24,3 +25,7 @@ class UserModel(db.Model):
 
     def check_password(self, _password):
         return compare_digest(_password, self.password)
+
+    @classmethod
+    def select_tasks(cls, _id):
+        return db.select(TaskModel).join(cls).where(cls.id == id)
