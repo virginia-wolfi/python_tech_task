@@ -17,6 +17,7 @@ class UserRegister(Resource):
     @users.expect(registration_fields)
     @users.marshal_with(user_brief_fields, envelope="User created")
     def post(self):
+        """Registers new user"""
         input_fields = marshal(request.get_json(), registration_fields)
         if UserModel.find_by_username(input_fields["username"]):
             abort(400, "This username is taken")
@@ -29,6 +30,9 @@ class UserRegister(Resource):
 class UserLogin(Resource):
     @users.expect(login_fields)
     def post(self):
+        """Logs in user
+        Copy access_token given in response and paste in Authorization header where applicable in format Bearer JWT
+        """
         input_fields = marshal(request.get_json(), login_fields)
 
         user = UserModel.find_by_username(input_fields["username"])
@@ -45,6 +49,7 @@ class UserLogout(Resource):
     @users.doc(security="Bearer Auth")
     @jwt_required()
     def post(self):
+        """Logs out user"""
         jti = get_jwt()["jti"]
         now = datetime.now(timezone.utc)
         db.session.add(TokenBlocklist(jti=jti, created_at=now))
@@ -57,6 +62,7 @@ class UserProfile(Resource):
     @jwt_required()
     @users.doc(security="Bearer Auth")
     def get(self):
+        """Shows user's profile"""
         id = current_user.id
         user = db.session.scalars(db.select(UserModel).filter_by(id=id)).first()
         return user, 200
@@ -64,6 +70,7 @@ class UserProfile(Resource):
     @jwt_required()
     @users.doc(security="Bearer Auth")
     def delete(self):
+        """Deletes user and tasks created by user"""
         user = current_user
         delete_from_db(user)
         jti = get_jwt()["jti"]

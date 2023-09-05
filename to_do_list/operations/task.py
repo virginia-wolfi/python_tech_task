@@ -19,7 +19,7 @@ def find_tasks(**kwargs) -> list[TaskModel]:
     for name, model_attr in str_attrs:
         if name in kwargs:
             filters.append(model_attr.icontains(kwargs[name]))
-    return db.session.scalars(db.select(TaskModel).where(and_(*filters))).all()
+    return db.select(TaskModel).where(and_(*filters)).order_by(TaskModel.id)
 
 
 def update_task(id: int, **kwargs) -> None:
