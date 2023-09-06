@@ -1,0 +1,7 @@
+/venv
+/tests
+/.pytest_cache
+requirements-dev.txt
+.coverage
+.gitignore
+*.md
