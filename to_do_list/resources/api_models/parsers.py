@@ -8,6 +8,13 @@ task_parser.add_argument(
     "per page", type=int, location="args", help="tasks per page", default=5
 )
 task_parser.add_argument(
+    "title",
+    type=str,
+    location="args",
+    help="specify title search criteria",
+    store_missing=False,
+)
+task_parser.add_argument(
     "username",
     type=str,
     location="args",
