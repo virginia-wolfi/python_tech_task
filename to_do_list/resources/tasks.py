@@ -24,10 +24,10 @@ class TaskSelect(Resource):
     @tasks.doc(security="Bearer Auth")
     def get(self):
         """Gets tasks with provided criteria"""
-        tasks = dict()
+        tasks = list()
         args = task_parser.parse_args()
-        page = args.pop("page")
-        per_page = args.pop("per page")
+        page = int(args.pop("page"))
+        per_page = int(args.pop("per page"))
         if not args:
             all_tasks = TaskModel.select_all()
         else:
@@ -39,8 +39,10 @@ class TaskSelect(Resource):
                 args.pop("username")
             all_tasks = find_tasks(**args)
         paginated = paginate_tasks(all_tasks, page, per_page)
+        if not paginated.items:
+            abort(404, "No task was found")
         for task in paginated:
-            tasks[f"Task id {task.id}"] = marshal(task, repr_task_fields)
+            tasks.append(marshal(task, repr_task_fields))
         return make_response(jsonify(tasks), 200)
 
 
@@ -50,7 +52,7 @@ class TaskCreate(Resource):
     @tasks.doc(security="Bearer Auth")
     @tasks.marshal_with(brief_task_fields, envelope="Created new task")
     def post(self):
-        """Creates a new task"""
+        """Creates new task"""
         id = current_user.id
         input_data = marshal(request.get_json(), creation_task_fields)
         new_task = TaskModel(user_id=id, **input_data)
