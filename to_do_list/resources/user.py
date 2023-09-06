@@ -42,7 +42,7 @@ class UserLogin(Resource):
             access_token = create_access_token(identity=user)
             return make_response({"access_token": access_token}, 200)
 
-        abort(401, "Wrong username or password")
+        abort(400, "Wrong username or password")
 
 
 class UserLogout(Resource):
