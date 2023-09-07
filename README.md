@@ -54,7 +54,7 @@ Create .env file in the root folder and fill it according to the .env.example fi
 This is required to run the application, test it, and build a Docker image.
 Create databases for development and testing and fill DEVELOPMENT_DATABASE_URL and TESTING_DATABASE_URL in .env file in format
 ~~~
-postgresql://username:password@host:port/database
+postgresql+psycopg2://username:password@host:port/database
 ~~~
 # Service start
 
