@@ -4,7 +4,7 @@ repr_task_fields = Model(
     "Representation task model",
     {
         "id": fields.Integer(),
-        "title": fields.String(required=True),
+        "title": fields.String,
         "description": fields.String(),
         "status": fields.String(
             enum=["new", "in progress", "completed", "postponed"],
@@ -29,6 +29,7 @@ creation_task_fields = Model(
             min_length=4,
         ),
         "status": fields.String(
+            required=True,
             description="Task status",
             enum=["new", "in progress", "completed", "postponed"],
             example="in progress",

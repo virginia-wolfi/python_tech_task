@@ -31,9 +31,13 @@ update_task_params = (
 
 select_task_params = (
     ({"username": "test_name_1"}, b"title", 200),
-    ({"username": "unknown_username"}, b"Username was not found", 400),
+    (
+        {"username": "unknown_username"},
+        b"The requested URL was not found on the server",
+        404,
+    ),
     ({"title": "User_1_task_1"}, b"title", 200),
-    ({"title": "Unknown_title"}, b"No task was found", 404),
+    ({"title": "Unknown_title"}, b"The requested URL was not found on the server", 404),
     ({"page": 5}, b"The requested URL was not found on the server", 404),
     ({"description": "Test_description_1"}, b"title", 200),
     ({"status": "new", "title": "User_1_task_1"}, b"title", 200),

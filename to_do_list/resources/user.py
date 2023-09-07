@@ -16,6 +16,12 @@ users = Namespace("Users", description="Users related operations", path="/")
 class UserRegister(Resource):
     @users.expect(registration_fields)
     @users.marshal_with(user_brief_fields, envelope="User created")
+    @users.doc(
+        responses={
+            201: "Created",
+            400: "Validation error",
+        }
+    )
     def post(self):
         """Registers new user"""
         input_fields = marshal(request.get_json(), registration_fields)
@@ -29,6 +35,12 @@ class UserRegister(Resource):
 
 class UserLogin(Resource):
     @users.expect(login_fields)
+    @users.doc(
+        responses={
+            200: "Success",
+            400: "Validation error",
+        }
+    )
     def post(self):
         """Logs in user
         Copy access_token given in response and paste in Authorization header where applicable in format Bearer JWT
@@ -46,7 +58,13 @@ class UserLogin(Resource):
 
 
 class UserLogout(Resource):
-    @users.doc(security="Bearer Auth")
+    @users.doc(
+        security="Bearer Auth",
+        responses={
+            200: "Success",
+            401: "Unauthorized",
+        },
+    )
     @jwt_required()
     def post(self):
         """Logs out user"""
@@ -60,7 +78,13 @@ class UserLogout(Resource):
 class UserProfile(Resource):
     @users.marshal_with(registration_fields, envelope="User's profile")
     @jwt_required()
-    @users.doc(security="Bearer Auth")
+    @users.doc(
+        security="Bearer Auth",
+        responses={
+            200: "Success",
+            401: "Unauthorized",
+        },
+    )
     def get(self):
         """Shows user's profile"""
         id = current_user.id
@@ -68,7 +92,13 @@ class UserProfile(Resource):
         return user, 200
 
     @jwt_required()
-    @users.doc(security="Bearer Auth")
+    @users.doc(
+        security="Bearer Auth",
+        responses={
+            200: "Success",
+            401: "Unauthorized",
+        },
+    )
     def delete(self):
         """Deletes user and tasks created by user"""
         user = current_user

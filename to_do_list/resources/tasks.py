@@ -21,7 +21,10 @@ tasks = Namespace("Tasks", description="Tasks related operations", path="/tasks"
 class TaskSelect(Resource):
     @jwt_required()
     @tasks.expect(task_parser)
-    @tasks.doc(security="Bearer Auth")
+    @tasks.doc(
+        security="Bearer Auth",
+        responses={200: "Success", 401: "Unauthorized", 404: "Not found"},
+    )
     def get(self):
         """Gets tasks with provided criteria"""
         tasks = list()
@@ -35,12 +38,12 @@ class TaskSelect(Resource):
                 try:
                     args["user_id"] = UserModel.find_by_username(args["username"]).id
                 except AttributeError:
-                    abort(400, "Username was not found")
+                    abort(404)
                 args.pop("username")
             all_tasks = find_tasks(**args)
         paginated = paginate_tasks(all_tasks, page, per_page)
         if not paginated.items:
-            abort(404, "No task was found")
+            abort(404)
         for task in paginated:
             tasks.append(marshal(task, repr_task_fields))
         return make_response(jsonify(tasks), 200)
@@ -49,7 +52,10 @@ class TaskSelect(Resource):
 class TaskCreate(Resource):
     @jwt_required()
     @tasks.expect(creation_task_fields)
-    @tasks.doc(security="Bearer Auth")
+    @tasks.doc(
+        security="Bearer Auth",
+        responses={201: "Created", 400: "Validation error", 401: "Unauthorized"},
+    )
     @tasks.marshal_with(brief_task_fields, envelope="Created new task")
     def post(self):
         """Creates new task"""
@@ -62,7 +68,10 @@ class TaskCreate(Resource):
 
 class Task(Resource):
     @jwt_required()
-    @tasks.doc(security="Bearer Auth")
+    @tasks.doc(
+        security="Bearer Auth",
+        responses={200: "Success", 401: "Unauthorized", 404: "Not found"},
+    )
     @tasks.marshal_with(repr_task_fields)
     def get(self, task_id):
         """Gets task with provided id"""
@@ -73,7 +82,16 @@ class Task(Resource):
 
     @jwt_required()
     @tasks.expect(update_task_fields)
-    @tasks.doc(security="Bearer Auth")
+    @tasks.doc(
+        security="Bearer Auth",
+        responses={
+            200: "Success",
+            400: "Validation error",
+            401: "Unauthorized",
+            403: "Forbidden",
+            404: "Not found",
+        },
+    )
     @tasks.marshal_with(brief_task_fields, envelope="Updated task")
     def patch(self, task_id):
         """Updates a task with provided id.
@@ -91,7 +109,16 @@ class Task(Resource):
         return task, 200
 
     @jwt_required()
-    @tasks.doc(security="Bearer Auth")
+    @tasks.doc(
+        security="Bearer Auth",
+        responses={
+            200: "Success",
+            400: "Validation error",
+            401: "Unauthorized",
+            403: "Forbidden",
+            404: "Not found",
+        },
+    )
     def delete(self, task_id):
         """Deletes a task with provided id"""
         user = current_user

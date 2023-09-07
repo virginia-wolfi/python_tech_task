@@ -19,6 +19,7 @@ def create_app(config_obj=DevelopmentConfig()):
         app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
     ACCESS_EXPIRES = timedelta(hours=1)
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = ACCESS_EXPIRES
+    app.config["RESTX_ERROR_404_HELP"] = False
     app.json.sort_keys = False
     app.json.ensure_ascii = False
     db.init_app(app)
