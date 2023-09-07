@@ -5,7 +5,7 @@ task_parser.add_argument(
     "page", type=int, location="args", help="which search page to display", default=1
 )
 task_parser.add_argument(
-    "per page", type=int, location="args", help="tasks per page", default=5
+    "per_page", type=int, location="args", help="tasks per page", default=5
 )
 task_parser.add_argument(
     "title",

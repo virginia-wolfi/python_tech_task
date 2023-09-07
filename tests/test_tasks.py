@@ -62,12 +62,12 @@ def test_update_by_wrong_id_task(user_jwt, another_user_jwt, task_id, task_actio
     ("query_string", "status_code"),
     (
         ({}, 200),
-        ({"per page": 2}, 200),
+        ({"per_page": 2}, 200),
     ),
 )
 def test_select_tasks(user_jwt, created_tasks, task_action, query_string, status_code):
     response = task_action.select(user_jwt, **query_string)
-    assert len(response.json) == query_string.get("per page", 5)
+    assert len(response.json) == query_string.get("per_page", 5)
     assert status_code == response.status_code
 
 

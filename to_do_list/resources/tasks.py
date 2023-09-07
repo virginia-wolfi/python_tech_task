@@ -27,7 +27,7 @@ class TaskSelect(Resource):
         tasks = list()
         args = task_parser.parse_args()
         page = int(args.pop("page"))
-        per_page = int(args.pop("per page"))
+        per_page = int(args.pop("per_page"))
         if not args:
             all_tasks = TaskModel.select_all()
         else:
