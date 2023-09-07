@@ -43,11 +43,11 @@ Authorization: Bearer <JWT>
 ~~~
 # Application installation
 ```
-git clone https://github.com/virginia-wolfi/python_tech_task.git
-cd python_tech_task
-python3 -m venv env
-./env/bin/activate
-pip install -r requirements-dev.txt
+$ git clone https://github.com/virginia-wolfi/python_tech_task.git
+$ cd python_tech_task
+$ python3 -m venv venv
+$ source ./venv/bin/activate
+$ pip install -r requirements-dev.txt
 ```
 # Configuration
 Create .env file in the root folder and fill it according to the .env.example file. 
@@ -71,11 +71,12 @@ to start server run from the terminal in root directory
 $ flask run
 ```
 
-visit http://127.0.0.1:5000/ in a browser. You should see the site generated with Swagger. You can send requests with ready payload JSON schemas
+visit http://127.0.0.1:5000/ in a browser. You should see the site generated with Swagger. 
+You can send requests with ready payload JSON schemas
 
 # Docker
 
-to build Docker image and start container run
+to build Docker image and start container, run
 ```
 $ docker compose up -d
 $ docker exec to_do_app flask db create
@@ -94,7 +95,13 @@ POSTGRES_USER=postgres
 POSTGRES_PASSWORD=mypassword
 POSTGRES_DB=to_do_list
 ~~~
-server name is db
+in connection tab in the Host name/address field insert "db" - this is the name of postgres service taken from docker-compose.yaml.
+
+stop container:
+```
+$ docker stop to_do_app
+
+```
 
 # Running Tests
 ~~~
